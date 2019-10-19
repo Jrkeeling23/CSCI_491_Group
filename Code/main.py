@@ -11,9 +11,14 @@ class Main():
 
         # Run machine learning algorithms
         self.algorithm.naive_bays()
-        for k_neighbors in range(5, 15, 5):
-            self.algorithm.KNN(k_neighbors)
-
-
+        heighest_acc = 0.0
+        tuned_neighbors = 0
+        for k_neighbors in range(1, 25):
+            acc = self.algorithm.KNN(k_neighbors)
+            print("Accuracy ", acc)
+            if acc > heighest_acc:
+                heighest_acc = acc
+                tuned_neighbors = k_neighbors
+        print("Highest accuracy neighbor count: ", tuned_neighbors, " with accuracy ", heighest_acc)
 if __name__ == "__main__":
     Main()

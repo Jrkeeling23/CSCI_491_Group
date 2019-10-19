@@ -36,3 +36,4 @@ class Algorithm:
         predict = model.predict(self.data_vector_test)  # Predict on the test set
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
         print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
+        return(metrics.accuracy_score(self.y_test, predict))

@@ -14,10 +14,10 @@ class Data():
         self.id = None  # ID DataFrame
         self.label = None  # Label DataFrame
         self.get_files()
-        self.text = self.text[0:1000]  # TODO use full data set
-        self.id = self.id[0:1000]   # TODO use full data set
-        self.label = self.label[0:1000]   # TODO use full data set
-        # self.stop_words()
+        self.text = self.text[0:100000]  # TODO use full data set
+        self.id = self.id[0:100000]   # TODO use full data set
+        self.label = self.label[0:100000]   # TODO use full data set
+        self.stop_words()
         self.remove_punctuation()
         self.stem()
         # self.lemmatize()
