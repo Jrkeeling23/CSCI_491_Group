@@ -10,7 +10,7 @@ class Algorithm:
         self.data = data  # @Variables: Id, Text, Label
         # TODO test on other data
         # Train test split sourced from: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
-        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.data.text, self.data.label,
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.data.train_tweet, self.data.train_label,
                                                                                 test_size=0.2)  # Splits the data into train and test sets
         self.vectorizer = CountVectorizer('english')
         self.data_vector = self.vectorizer.fit_transform(self.x_train)  # Fit a fector on the train data
