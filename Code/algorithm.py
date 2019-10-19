@@ -4,6 +4,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
+
 class Algorithm:
     def __init__(self, data):
         self.data = data  # @Variables: Id, Text, Label
@@ -15,14 +16,8 @@ class Algorithm:
         self.data_vector = self.vectorizer.fit_transform(self.x_train)  # Fit a fector on the train data
         self.data_vector_test = self.vectorizer.transform(self.x_test)  # Fit the test data into a vector
 
-        self.naive_bays()
-        self.KNN(5)
-        self.KNN(10)
-
     def naive_bays(self):  # Predict with Naive Bayes
-
-        print(
-            '\n----------------------------------------------Naive Bayes----------------------------------------------\n')
+        self.data.print_title('Naive Bayes')
 
         # Gets the data vector for the algorithm. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
         model = MultinomialNB()  # Instantiate the Naive Bayes Model
@@ -30,14 +25,14 @@ class Algorithm:
         predict = model.predict(self.data_vector_test)  # Predict with naive bayes
 
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
-        print("\n", metrics.classification_report(self.y_test, predict)) # Print Metrics
+        print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
 
-    def KNN(self, k_neighbors): # Method for K nearest neightbors
-        print(
-            '\n----------------------------------------------', k_neighbors, ' Nearest Neighbors----------------------------------------------\n')
+    def KNN(self, k_neighbors):  # Method for K nearest neightbors
+        self.data.print_title(str(str(k_neighbors) + ' Nearest Neighbors'))
 
-        model = KNeighborsClassifier(n_neighbors=k_neighbors, weights='distance') # Instantiate K Nearest Neighbors model
-        model.fit(self.data_vector, self.y_train) # Fit the data to the model
-        predict = model.predict(self.data_vector_test) # Predict on the test set
-       # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
-        print("\n", metrics.classification_report(self.y_test, predict)) # Print Metrics
+        model = KNeighborsClassifier(n_neighbors=k_neighbors,
+                                     weights='distance')  # Instantiate K Nearest Neighbors model
+        model.fit(self.data_vector, self.y_train)  # Fit the data to the model
+        predict = model.predict(self.data_vector_test)  # Predict on the test set
+        # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
+        print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics

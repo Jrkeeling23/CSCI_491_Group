@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 import preprocessor as tweet_preprocessor
 import numpy as np
 
+
 class Data():
     def __init__(self):
         nltk.download('stopwords')
@@ -13,27 +14,27 @@ class Data():
         self.id = None  # ID DataFrame
         self.label = None  # Label DataFrame
         self.get_files()
-        self.text = self.text[0:100000]  # TODO use full data set
-        self.id = self.id[0:100000]   # TODO use full data set
-        self.label = self.label[0:100000]   # TODO use full data set
-        self.stop_words()
+        self.text = self.text[0:1000]  # TODO use full data set
+        self.id = self.id[0:1000]   # TODO use full data set
+        self.label = self.label[0:1000]   # TODO use full data set
+        # self.stop_words()
         self.remove_punctuation()
         self.stem()
         # self.lemmatize()
         # Numpy flatten sourced from https://stackoverflow.com/questions/47675520/getting-error-on-standardscalar-fit-transform , user:O.Suleiman
-        self.text = np.array(self.text).flatten() # Sets self.text to a DataFrame
+        self.text = np.array(self.text).flatten()  # Sets self.text to a DataFrame
 
     def get_files(self):  # Get the data files and convert them to pandas DataFrames.
-        print(
-            '\n----------------------------------------------Getting Data Files----------------------------------------------\n')
+        self.print_title('Getting Data Files')
+
         self.text = list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.text'))  # Makes Text a list
         # Numpy flatten sourced from https://stackoverflow.com/questions/47675520/getting-error-on-standardscalar-fit-transform , user:O.Suleiman
         self.id = np.array(list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.ids'))).flatten()
         self.label = np.array(list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.labels'))).flatten()
 
     def stem(self):  # Method to stem test
-        print(
-            '\n------------------------------------------------Stemming Data-------------------------------------------------\n')
+        self.print_title('Stemming Data')
+
         stemmer = LancasterStemmer()  # Initialize a stemmer
         iterator = 0  # Iterator to replace stemmed sentence back into self.text list
         for row in self.text:  # Loops through each tweet in self.text
@@ -46,8 +47,8 @@ class Data():
             iterator += 1
 
     def lemmatize(self):  # Method to lemmatize test
-        print(
-            '\n-----------------------------------------------Lemmatizing Data-----------------------------------------------\n')
+        self.print_title('Lemmatizing Data')
+
         lemmatizer = WordNetLemmatizer()  # Instantiate a lemmatizer
         iterator = 0
         for row in self.text:  # Loos through each iteration tweet in self.text
@@ -59,8 +60,8 @@ class Data():
             iterator += 1
 
     def remove_punctuation(self):  # Removes tweet punctuation.
-        print(
-            '\n------------------------------------------------Cleaning Tweets-----------------------------------------------\n')
+        self.print_title('Cleaning Tweets')
+
         # Source for tweet cleaning: https://pypi.org/project/tweet-preprocessor/
         iterator = 0
         for row in self.text:  # Loops through each tweet
@@ -69,8 +70,8 @@ class Data():
 
     def stop_words(self):  # Removes stop words from tweet.
         # Following stop words code sourced from : https://pythonspot.com/nltk-stop-words/
-        print(
-            '\n-----------------------------------------Removing Stop Words From Data-----------------------------------------\n')
+
+        self.print_title('Removing Stop Words From Data')
         iterator = 0
         for row in self.text:  # Loops through each tweet in self.text
             stop_word_list = []  # Temp list to append tweet without stop words into self.text
@@ -82,3 +83,8 @@ class Data():
                 stop_word_list)  # Turn the list back into a string and replace self.text location.
             iterator += 1
 
+    def print_title(self, string): # Prints the string to the approx same length
+        dash_length = 100 - len(string)
+        dashes = '-' * (int(dash_length / 2))
+        new_string = (dashes + ' ' + string + ' '+ dashes)
+        print(new_string)
