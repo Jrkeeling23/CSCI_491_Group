@@ -24,6 +24,9 @@ class Data():
         # Numpy flatten sourced from https://stackoverflow.com/questions/47675520/getting-error-on-standardscalar-fit-transform , user:O.Suleiman
         self.text = np.array(self.text).flatten()  # Sets self.text to a DataFrame
 
+# TODO Deal with potential missing data
+
+
     def get_files(self):  # Get the data files and convert them to pandas DataFrames.
         self.print_title('Getting Data Files')
 
