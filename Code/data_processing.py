@@ -14,12 +14,12 @@ class Data():
         self.id = None  # ID DataFrame
         self.label = None  # Label DataFrame
         self.get_files()
-        self.text = self.text[0:100000]  # TODO use full data set
-        self.id = self.id[0:100000]   # TODO use full data set
-        self.label = self.label[0:100000]   # TODO use full data set
-        self.stop_words()
-        self.remove_punctuation()
-        self.stem()
+        # self.text = self.text[0:100000]  # TODO use full data set
+        # self.id = self.id[0:100000]   # TODO use full data set
+        # self.label = self.label[0:100000]   # TODO use full data set
+        # self.stop_words()
+        # self.remove_punctuation()
+        # self.stem()
         # self.lemmatize()
         # Numpy flatten sourced from https://stackoverflow.com/questions/47675520/getting-error-on-standardscalar-fit-transform , user:O.Suleiman
         self.text = np.array(self.text).flatten()  # Sets self.text to a DataFrame
