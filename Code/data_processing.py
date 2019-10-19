@@ -16,11 +16,10 @@ class Data():
         self.text = self.text[0:20]  # TODO use full data set
         self.id = self.id[0:20]  # TODO use full data set
         self.label = self.label[0:20]  # TODO use full data set
-
         self.stop_words()
         self.remove_punctuation()
         self.stem()
-        self.lemmatize()
+        # self.lemmatize()
         for i in self.text:
             print(i)
 
