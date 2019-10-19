@@ -20,8 +20,7 @@ class Data():
         self.remove_punctuation()
         self.stem()
         # self.lemmatize()
-        for i in self.text:
-            print(i)
+        self.text = pd.DataFrame(self.text) # Sets self.text to a DataFrame
 
     def get_files(self):  # Get the data files and convert them to pandas DataFrames.
         print(
@@ -80,3 +79,4 @@ class Data():
             self.text[iterator] = ' '.join(
                 stop_word_list)  # Turn the list back into a string and replace self.text location.
             iterator += 1
+
