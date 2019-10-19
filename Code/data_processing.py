@@ -44,7 +44,7 @@ class Data():
 
     def lemmatize(self):  # Method to lemmatize test
         print(
-            '\n----------------------------------------------Stemming Data----------------------------------------------\n')
+            '\n----------------------------------------------Lemmatizing Data----------------------------------------------\n')
         lemmatizer = WordNetLemmatizer()  # Instantiate a lemmatizer
         iterator = 0
         for row in self.text:  # Loos through each iteration tweet in self.text
