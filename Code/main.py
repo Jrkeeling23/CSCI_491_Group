@@ -9,6 +9,5 @@ class Main():
         self.data = Data()  # Contains id, text, label variables
         self.algorithm = Algorithm(self.data)
 
-
 if __name__ == "__main__":
     Main()

@@ -3,7 +3,7 @@ import nltk
 from nltk import WordNetLemmatizer, SnowballStemmer, LancasterStemmer
 from nltk.corpus import stopwords
 import preprocessor as tweet_preprocessor
-
+import numpy as np
 
 class Data():
     def __init__(self):
@@ -13,21 +13,23 @@ class Data():
         self.id = None  # ID DataFrame
         self.label = None  # Label DataFrame
         self.get_files()
-        self.text = self.text[0:20]  # TODO use full data set
-        self.id = self.id[0:20]  # TODO use full data set
-        self.label = self.label[0:20]  # TODO use full data set
+        self.text = self.text # TODO use full data set
+        self.id = self.id  # TODO use full data set
+        self.label = self.label  # TODO use full data set
         self.stop_words()
         self.remove_punctuation()
         self.stem()
         # self.lemmatize()
-        self.text = pd.DataFrame(self.text) # Sets self.text to a DataFrame
+        # Numpy flatten sourced from https://stackoverflow.com/questions/47675520/getting-error-on-standardscalar-fit-transform , user:O.Suleiman
+        self.text = np.array(self.text).flatten() # Sets self.text to a DataFrame
 
     def get_files(self):  # Get the data files and convert them to pandas DataFrames.
         print(
             '\n----------------------------------------------Getting Data Files----------------------------------------------\n')
         self.text = list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.text'))  # Makes Text a list
-        self.id = pd.DataFrame(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.ids'))
-        self.label = pd.DataFrame(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.labels'))
+        # Numpy flatten sourced from https://stackoverflow.com/questions/47675520/getting-error-on-standardscalar-fit-transform , user:O.Suleiman
+        self.id = np.array(list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.ids'))).flatten()
+        self.label = np.array(list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.labels'))).flatten()
 
     def stem(self):  # Method to stem test
         print(
