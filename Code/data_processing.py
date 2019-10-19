@@ -10,9 +10,11 @@ class Data():
     def __init__(self):
         nltk.download('stopwords')
         nltk.download('wordnet')
-        self.text = None  # Text DataFrame
-        self.id = None  # ID DataFrame
-        self.label = None  # Label DataFrame
+        self.train_tweet = None  # Train Tweets
+        self.train_id = None  # Train ID's
+        self.train_label = None  # Train Labels
+        self.test_label = None # Test Labels
+        self.test_tweet = None # Test Tweets
         self.get_files()
         # self.text = self.text[0:100000]  # TODO use full data set
         # self.id = self.id[0:100000]   # TODO use full data set
@@ -22,7 +24,7 @@ class Data():
         # self.stem()
         # self.lemmatize()
         # Numpy flatten sourced from https://stackoverflow.com/questions/47675520/getting-error-on-standardscalar-fit-transform , user:O.Suleiman
-        self.text = np.array(self.text).flatten()  # Sets self.text to a DataFrame
+        self.train_tweet = np.array(self.train_tweet).flatten()  # Sets self.text to a DataFrame
 
 # TODO Deal with potential missing data
 
@@ -30,22 +32,26 @@ class Data():
     def get_files(self):  # Get the data files and convert them to pandas DataFrames.
         self.print_title('Getting Data Files')
 
-        self.text = list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.text'))  # Makes Text a list
+        self.train_tweet = list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.text'))  # Get train tweets
         # Numpy flatten sourced from https://stackoverflow.com/questions/47675520/getting-error-on-standardscalar-fit-transform , user:O.Suleiman
-        self.id = np.array(list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.ids'))).flatten()
-        self.label = np.array(list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.labels'))).flatten()
+        self.train_id = np.array(
+            list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.ids'))).flatten()  # Get train id's
+        self.train_label = np.array(
+            list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.labels'))).flatten()  # Get train Labels
+        self.test_tweet = list(open('../data/us_test.text'))  # Get test Tweets
+        self.test_label = np.array(list(open('../data/us_test.labels'))).flatten()  # Get test labels
 
     def stem(self):  # Method to stem test
         self.print_title('Stemming Data')
 
         stemmer = LancasterStemmer()  # Initialize a stemmer
         iterator = 0  # Iterator to replace stemmed sentence back into self.text list
-        for row in self.text:  # Loops through each tweet in self.text
+        for row in self.train_tweet:  # Loops through each tweet in self.text
             stemmed_list = []  # Temp list to add back into self.text
             split_row = row.split()  # Splits the tweet into words by ' '.
             for word in split_row:  # Loops through each word
                 stemmed_list.append(stemmer.stem(word))  # Appends the stemmed word to the temp list.
-            self.text[iterator] = ' '.join(
+            self.train_tweet[iterator] = ' '.join(
                 stemmed_list)  # converts the list to a sentence ands adds back into self.text
             iterator += 1
 
@@ -54,12 +60,12 @@ class Data():
 
         lemmatizer = WordNetLemmatizer()  # Instantiate a lemmatizer
         iterator = 0
-        for row in self.text:  # Loos through each iteration tweet in self.text
+        for row in self.train_tweet:  # Loos through each iteration tweet in self.text
             lemmatized_list = []  # Temp list to add back into self.text after tweet is lemmatized
             split_row = row.split()  # Splits the tweet into individual words
             for word in split_row:  # loops through each word.
                 lemmatized_list.append(lemmatizer.lemmatize(word))  # Appends the lemmatized word into a temp list.
-            self.text[iterator] = ' '.join(lemmatized_list)  # Replaces tweet with a lemmatized tweet.
+            self.train_tweet[iterator] = ' '.join(lemmatized_list)  # Replaces tweet with a lemmatized tweet.
             iterator += 1
 
     def remove_punctuation(self):  # Removes tweet punctuation.
@@ -67,8 +73,9 @@ class Data():
 
         # Source for tweet cleaning: https://pypi.org/project/tweet-preprocessor/
         iterator = 0
-        for row in self.text:  # Loops through each tweet
-            self.text[iterator] = tweet_preprocessor.clean(row)  # Replaces self.text tweet with the cleaned tweed.
+        for row in self.train_tweet:  # Loops through each tweet
+            self.train_tweet[iterator] = tweet_preprocessor.clean(
+                row)  # Replaces self.text tweet with the cleaned tweed.
             iterator += 1
 
     def stop_words(self):  # Removes stop words from tweet.
@@ -76,18 +83,18 @@ class Data():
 
         self.print_title('Removing Stop Words From Data')
         iterator = 0
-        for row in self.text:  # Loops through each tweet in self.text
+        for row in self.train_tweet:  # Loops through each tweet in self.text
             stop_word_list = []  # Temp list to append tweet without stop words into self.text
             split_row = row.split()  # Splits the tweet into individual words.
             for word in split_row:  # Loops through each word
                 if word not in set(stopwords.words('english')):  # If word not in nltk's stop words list.
                     stop_word_list.append(word)  # Append the word to a temp list.
-            self.text[iterator] = ' '.join(
+            self.train_tweet[iterator] = ' '.join(
                 stop_word_list)  # Turn the list back into a string and replace self.text location.
             iterator += 1
 
-    def print_title(self, string): # Prints the string to the approx same length
+    def print_title(self, string):  # Prints the string to the approx same length
         dash_length = 100 - len(string)
         dashes = '-' * (int(dash_length / 2))
-        new_string = (dashes + ' ' + string + ' '+ dashes)
+        new_string = (dashes + ' ' + string + ' ' + dashes)
         print(new_string)
