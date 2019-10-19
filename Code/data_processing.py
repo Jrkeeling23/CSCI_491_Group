@@ -13,9 +13,9 @@ class Data():
         self.id = None  # ID DataFrame
         self.label = None  # Label DataFrame
         self.get_files()
-        self.text = self.text # TODO use full data set
-        self.id = self.id  # TODO use full data set
-        self.label = self.label  # TODO use full data set
+        self.text = self.text[0:1000]  # TODO use full data set
+        self.id = self.id[0:1000]  # TODO use full data set
+        self.label = self.label[0:1000]  # TODO use full data set
         self.stop_words()
         self.remove_punctuation()
         self.stem()
