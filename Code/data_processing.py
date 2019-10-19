@@ -13,9 +13,9 @@ class Data():
         self.id = None  # ID DataFrame
         self.label = None  # Label DataFrame
         self.get_files()
-        self.text = self.text[0:1000]  # TODO use full data set
-        self.id = self.id[0:1000]  # TODO use full data set
-        self.label = self.label[0:1000]  # TODO use full data set
+        self.text = self.text[0:100000]  # TODO use full data set
+        self.id = self.id[0:100000]   # TODO use full data set
+        self.label = self.label[0:100000]   # TODO use full data set
         self.stop_words()
         self.remove_punctuation()
         self.stem()
@@ -33,7 +33,7 @@ class Data():
 
     def stem(self):  # Method to stem test
         print(
-            '\n----------------------------------------------Stemming Data----------------------------------------------\n')
+            '\n------------------------------------------------Stemming Data-------------------------------------------------\n')
         stemmer = LancasterStemmer()  # Initialize a stemmer
         iterator = 0  # Iterator to replace stemmed sentence back into self.text list
         for row in self.text:  # Loops through each tweet in self.text
@@ -47,7 +47,7 @@ class Data():
 
     def lemmatize(self):  # Method to lemmatize test
         print(
-            '\n----------------------------------------------Lemmatizing Data----------------------------------------------\n')
+            '\n-----------------------------------------------Lemmatizing Data-----------------------------------------------\n')
         lemmatizer = WordNetLemmatizer()  # Instantiate a lemmatizer
         iterator = 0
         for row in self.text:  # Loos through each iteration tweet in self.text
@@ -60,17 +60,17 @@ class Data():
 
     def remove_punctuation(self):  # Removes tweet punctuation.
         print(
-            '\n----------------------------------------------Cleaning Tweets----------------------------------------------\n')
+            '\n------------------------------------------------Cleaning Tweets-----------------------------------------------\n')
         # Source for tweet cleaning: https://pypi.org/project/tweet-preprocessor/
         iterator = 0
         for row in self.text:  # Loops through each tweet
-            self.text[iterator] = tweet_preprocessor.tokenize(row)  # Replaces self.text tweet with the cleaned tweed.
+            self.text[iterator] = tweet_preprocessor.clean(row)  # Replaces self.text tweet with the cleaned tweed.
             iterator += 1
 
     def stop_words(self):  # Removes stop words from tweet.
         # Following stop words code sourced from : https://pythonspot.com/nltk-stop-words/
         print(
-            '\n----------------------------------------------Removing Stop Words From Data----------------------------------------------\n')
+            '\n-----------------------------------------Removing Stop Words From Data-----------------------------------------\n')
         iterator = 0
         for row in self.text:  # Loops through each tweet in self.text
             stop_word_list = []  # Temp list to append tweet without stop words into self.text
