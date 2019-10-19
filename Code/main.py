@@ -27,8 +27,8 @@ class Main():
         #         tuned_neighbors = k_neighbors
         # print("Highest accuracy neighbor count: ", tuned_neighbors, " with accuracy ", heighest_acc)
 
-
-        plt.plot(neighbors, accuracy)
-        plt.show()
+        #
+        # plt.plot(neighbors, accuracy)
+        # plt.show()
 if __name__ == "__main__":
     Main()
