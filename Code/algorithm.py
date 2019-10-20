@@ -9,21 +9,27 @@ from os import path
 
 
 class Algorithm:
-    def __init__(self, data):
+    def __init__(self, data, tune_params):
         self.data = data  # @Variables: Id, Text, Label
         # TODO test on other data
 
         self.vectorizer = CountVectorizer('english')
         self.data_vector = self.vectorizer.fit_transform(self.data.train_tweet)  # Fit a fector on the train data
         self.data_vector_test = self.vectorizer.transform(self.data.test_tweet)  # Fit the test data into a vector
+        if tune_params:
+            # self.tune_naive_bayes()
+            # self.tune_KNN()
+            self.tune_svm_svc()
 
     def naive_bayes(self):  # Predict with Naive Bayes
         self.data.print_title('Naive Bayes')
         if not self.model_exists('NB.sav'):  # Saves the model if it doesn't exist
             # Gets the data vector for the algorithm. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
-            tuned_params = self.tune_naive_bayes()  # Tune Parameters
-            nb_model = MultinomialNB(alpha=tuned_params['alpha'],
-                                     fit_prior=tuned_params['fit_prior'])  # Instantiate the Naive Bayes Model
+            # tuned_params = self.tune_naive_bayes()  # Tune Parameters
+            # nb_model = MultinomialNB(alpha=tuned_params['alpha'],
+            #                          fit_prior=tuned_params['fit_prior'])  # Instantiate the Naive Bayes Model
+            nb_model = MultinomialNB(alpha=0.7,
+                                     fit_prior=True)  # Instantiate the Naive Bayes Model
             self.data.print_title('Fitting Naive Bayes Model')
             nb_model.fit(self.data_vector, self.data.train_label)  # Fit the naive bayes model
             self.save_model(nb_model, 'NB.sav')
@@ -36,11 +42,15 @@ class Algorithm:
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
         print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
 
-    def KNN(self, k_neighbors):  # Method for K nearest neightbors
-        self.data.print_title(str(str(k_neighbors) + ' Nearest Neighbors'))
+    def KNN(self):  # Method for K nearest neightbors
+        self.data.print_title(' K Nearest Neighbors')
         if not self.model_exists('KNN.sav'):  # Saves the model if it doesn't exist
-            knn_model = KNeighborsClassifier(n_neighbors=k_neighbors,
-                                             weights='distance')  # Instantiate K Nearest Neighbors model
+            # tuned_params = self.tune_KNN()  # Tune Parameters
+            # knn_model = KNeighborsClassifier(n_neighbors=tuned_params['n_neighbors'], weights=tuned_params['weights'],
+            #                                  algorithm=tuned_params['algorithm'], p=tuned_params['p'],
+            #                                  metric=tuned_params['metric'])  # Instantiate K Nearest Neighbors model
+            knn_model = KNeighborsClassifier(n_neighbors=29, weights='uniform', algorithm='auto', p='p',
+                                             metric='cosine')  # Instantiate K Nearest Neighbors model
             self.data.print_title('Fitting KNN Model')
             knn_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(knn_model, 'KNN.sav')
@@ -55,7 +65,12 @@ class Algorithm:
         # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
         self.data.print_title('SVM')
         if not self.model_exists('SVM.sav'):  # Saves the model if it doesn't exist
-            svm_model = svm.SVC(gamma='auto')  # Instantiate SVM Model
+            # tuned_params = self.tune_svm_svc()  # Tune Parameters
+            # svm_model = svm.SVC(gamma='auto', kernel=tuned_params['kernel'],
+            #                     coef0=tuned_params['coef0'], shrinking=tuned_params['shrinking'],
+            #                     probability=tuned_params['probability'],
+            #                     decision_function_shape=tuned_params['decisiion_function'])  # Instantiate SVM Model
+            svm_model = svm.SVC(gamma='auto', kernel='linear', coef0=0.0, shrinking=True, probability=True, decision_function_shape='ovo')  # Instantiate SVM Model
             self.data.print_title('Fitting SVM Model')
             svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(svm_model, 'SVM.sav')
@@ -90,6 +105,33 @@ class Algorithm:
         # Following code for tuning sourced from: https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
         params = {'alpha': [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
                   'fit_prior': [True, False]}  # Set the params and values to tune
-        grid_search = GridSearchCV(MultinomialNB(), params, refit=True)  # Instantiate grid search
+        grid_search = GridSearchCV(MultinomialNB(), params, verbose=3)  # Instantiate grid search
         grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
-        return grid_search.best_params_  # Return best params
+        print("NB best params: ", grid_search.best_params_)
+
+    def tune_KNN(self):  # Tune the KNN parameters
+        self.data.print_title('Tuning KNN')
+
+        # Following code for tuning sourced from: https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
+
+        params = {'n_neighbors': list(range(1, 30)), 'weights': ['uniform', 'distance'],
+                  'algorithm': ['auto', 'brute'], 'p': ['p', 1, 2],
+                  'metric': ['cityblock', 'cosine', 'euclidean', 'l1', 'l2',
+                             'manhattan']}  # Set the params and values to tune
+        grid_search = GridSearchCV(KNeighborsClassifier(), params, verbose=3)  # Instantiate grid search
+        grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
+        print("KNN best params: ", grid_search.best_params_)
+
+    def tune_svm_svc(self):  # Tune svm_svc params
+        self.data.print_title('Tuning SVM SVC')
+
+        # Following code for tuning sourced from: https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
+
+        params = {'C': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+                  'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
+                  'coef0': [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+                  'shrinking': [True, False], 'probability': [True, False],
+                  'decision_function_shape': ['ovo', 'ovr']}  # Set the params and values to tune
+        grid_search = GridSearchCV(svm.SVC(), params, verbose=3)  # Instantiate grid search
+        grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
+        print("SVM best params: ", grid_search.best_params_)
