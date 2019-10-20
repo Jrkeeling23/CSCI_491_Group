@@ -8,12 +8,13 @@ class Main():
 
     def __init__(self):
         self.data = Data()  # Contains id, text, label variables
-        self.algorithm = Algorithm(self.data)  # Contains Naive Bayes, KNN
+        tune_algo_params = True
+        self.algorithm = Algorithm(self.data, tune_algo_params)  # Contains Naive Bayes, KNN
 
         # Run machine learning algorithms
-        self.algorithm.naive_bayes()
-        # self.algorithm.KNN(23)
-        # self.get_best_k_neightbor()
+        # self.algorithm.naive_bayes()
+        # self.algorithm.KNN()
+        # # self.get_best_k_neightbor()
         # self.algorithm.SVM()
 
     def get_best_k_neightbor(self):
