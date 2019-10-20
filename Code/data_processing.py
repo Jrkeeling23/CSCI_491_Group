@@ -16,8 +16,8 @@ class Data():
         self.test_label = None # Test Labels
         self.test_tweet = None # Test Tweets
         self.get_files()
-        self.train_label = self.train_label[0:10000]
-        self.train_tweet = self.train_tweet[0:10000]
+        # self.train_label = self.train_label[0:100000]
+        # self.train_tweet = self.train_tweet[0:100000]
         # self.stop_words()
         # self.remove_punctuation()
         # self.stem()
