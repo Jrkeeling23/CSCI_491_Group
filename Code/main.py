@@ -3,16 +3,18 @@ from algorithm import Algorithm
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 class Main():
 
     def __init__(self):
         self.data = Data()  # Contains id, text, label variables
-        self.algorithm = Algorithm(self.data) # Contains Naive Bayes, KNN
+        self.algorithm = Algorithm(self.data)  # Contains Naive Bayes, KNN
 
         # Run machine learning algorithms
-        self.algorithm.naive_bays()
-        self.algorithm.KNN(23)
+        # self.algorithm.naive_bays()
+        # self.algorithm.KNN(23)
         # self.get_best_k_neightbor()
+        self.algorithm.SVM()
 
     def get_best_k_neightbor(self):
         heighest_acc = 0.0
@@ -29,7 +31,6 @@ class Main():
                 heighest_acc = acc
                 tuned_neighbors = k_neighbors
         print("Highest accuracy neighbor count: ", tuned_neighbors, " with accuracy ", heighest_acc)
-
 
         plt.plot(neighbors, accuracy)
         plt.show()
