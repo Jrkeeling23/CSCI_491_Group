@@ -25,7 +25,7 @@ class Algorithm:
         self.data.print_title('Naive Bayes')
         if not self.model_exists('NB.sav'):  # Saves the model if it doesn't exist
             # Gets the data vector for the algorithm. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
-            tuned_params = self.tune_naive_bayes()  # Tune Parameters
+            # tuned_params = self.tune_naive_bayes()  # Tune Parameters
             # nb_model = MultinomialNB(alpha=tuned_params['alpha'],
             #                          fit_prior=tuned_params['fit_prior'])  # Instantiate the Naive Bayes Model
             nb_model = MultinomialNB(alpha=0.7,
