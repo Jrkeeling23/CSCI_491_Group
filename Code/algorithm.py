@@ -65,11 +65,12 @@ class Algorithm:
         # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
         self.data.print_title('SVM')
         if not self.model_exists('SVM.sav'):  # Saves the model if it doesn't exist
-            tuned_params = self.tune_svm_svc()  # Tune Parameters
-            svm_model = svm.SVC(gamma='auto', kernel=tuned_params['kernel'],
-                                coef0=tuned_params['coef0'], shrinking=tuned_params['shrinking'],
-                                probability=tuned_params['probability'],
-                                decision_function_shape=tuned_params['decisiion_function'])  # Instantiate SVM Model
+            # tuned_params = self.tune_svm_svc()  # Tune Parameters
+            # svm_model = svm.SVC(gamma='auto', kernel=tuned_params['kernel'],
+            #                     coef0=tuned_params['coef0'], shrinking=tuned_params['shrinking'],
+            #                     probability=tuned_params['probability'],
+            #                     decision_function_shape=tuned_params['decisiion_function'])  # Instantiate SVM Model
+            svm_model = svm.SVC(gamma='auto', kernel='linear', coef0=0.0, shrinking=True, probability=True, decision_function_shape='ovo')  # Instantiate SVM Model
             self.data.print_title('Fitting SVM Model')
             svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(svm_model, 'SVM.sav')

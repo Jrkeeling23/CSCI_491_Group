@@ -8,33 +8,13 @@ class Main():
 
     def __init__(self):
         self.data = Data()  # Contains id, text, label variables
-        tune_algo_params = True
+        tune_algo_params = False
         self.algorithm = Algorithm(self.data, tune_algo_params)  # Contains Naive Bayes, KNN
 
         # Run machine learning algorithms
-        # self.algorithm.naive_bayes()
-        # self.algorithm.KNN()
-        # # self.get_best_k_neightbor()
-        # self.algorithm.SVM()
-
-    def get_best_k_neightbor(self):
-        heighest_acc = 0.0
-        tuned_neighbors = 0
-        neighbors = []
-        accuracy = []
-        for k_neighbors in range(1, 25):
-            acc = self.algorithm.KNN(k_neighbors)
-            print("Neighbors: ", k_neighbors, "Accuracy ", acc)
-            neighbors.append(k_neighbors)
-            accuracy.append(acc)
-
-            if acc > heighest_acc:
-                heighest_acc = acc
-                tuned_neighbors = k_neighbors
-        print("Highest accuracy neighbor count: ", tuned_neighbors, " with accuracy ", heighest_acc)
-
-        plt.plot(neighbors, accuracy)
-        plt.show()
+        self.algorithm.naive_bayes()
+        self.algorithm.KNN()
+        self.algorithm.SVM()
 
 
 if __name__ == "__main__":
