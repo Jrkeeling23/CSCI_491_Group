@@ -11,10 +11,10 @@ class Main():
         self.algorithm = Algorithm(self.data)  # Contains Naive Bayes, KNN
 
         # Run machine learning algorithms
-        # self.algorithm.naive_bays()
+        self.algorithm.naive_bayes()
         # self.algorithm.KNN(23)
         # self.get_best_k_neightbor()
-        self.algorithm.SVM()
+        # self.algorithm.SVM()
 
     def get_best_k_neightbor(self):
         heighest_acc = 0.0
