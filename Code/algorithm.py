@@ -19,8 +19,8 @@ class Algorithm:
         if tune_params:
             # self.tune_naive_bayes()
             # self.tune_KNN()
-            self.tune_svm_svc()
-
+            # self.tune_svm_svc()
+            self.tune_svm_linear()
     def naive_bayes(self):  # Predict with Naive Bayes
         self.data.print_title('Naive Bayes')
         if not self.model_exists('NB.sav'):  # Saves the model if it doesn't exist
@@ -61,7 +61,7 @@ class Algorithm:
         # print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
         print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
 
-    def SVM(self):  # Method for support vector machine
+    def SVM_SVC(self):  # Method for support vector machine
         # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
         self.data.print_title('SVM')
         if not self.model_exists('SVM.sav'):  # Saves the model if it doesn't exist
@@ -75,6 +75,21 @@ class Algorithm:
             svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(svm_model, 'SVM.sav')
         svm_model = self.load_model('SVM.sav')  # Load the model
+        self.data.print_title('Predicting SVM')
+        predict = svm_model.predict(self.data_vector_test)  # Predict on the test set
+        # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
+        # print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
+        print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
+
+    def SVM_linear(self):  # Method for support vector machine Linear
+        # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
+        self.data.print_title('SVM Linear')
+        if not self.model_exists('SVM_linear.sav'):  # Saves the model if it doesn't exist
+            svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1', verbose=3)  # Instantiate SVM Model
+            self.data.print_title('Fitting SVM Linear Model')
+            svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
+            self.save_model(svm_model, 'SVM_linear.sav')
+        svm_model = self.load_model('SVM_linear.sav')  # Load the model
         self.data.print_title('Predicting SVM')
         predict = svm_model.predict(self.data_vector_test)  # Predict on the test set
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
@@ -135,3 +150,17 @@ class Algorithm:
         grid_search = GridSearchCV(svm.SVC(), params, verbose=3)  # Instantiate grid search
         grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
         print("SVM best params: ", grid_search.best_params_)
+
+
+    def tune_svm_linear(self):  # Tune svm_Linear params
+        self.data.print_title('Tuning Linear SVM')
+
+        # Following code for tuning sourced from: https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
+
+        params = {'C': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+                  'penalty': ['l1', 'l2'],
+                  'dual': [False],
+                  'multi_class' : ['ovr', 'crammer_singer'], 'fit_intercept': [True, False]}  # Set the params and values to tune
+        grid_search = GridSearchCV(svm.LinearSVC(), params, verbose=3)  # Instantiate grid search
+        grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
+        print("Linear SVM best params: ", grid_search.best_params_)
