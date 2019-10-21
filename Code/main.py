@@ -8,9 +8,8 @@ class Main():
 
     def __init__(self):
         self.data = Data()  # Contains id, text, label variables
-        tune_algo_params = False
+        tune_algo_params = True
         self.algorithm = Algorithm(self.data, tune_algo_params)  # Contains Naive Bayes, KNN
-        self.algorithm.SVM_linear()
         # Run machine learning algorithms
         self.algorithm.naive_bayes()
         # self.algorithm.KNN()
