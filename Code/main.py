@@ -10,11 +10,11 @@ class Main():
         self.data = Data()  # Contains id, text, label variables
         tune_algo_params = False
         self.algorithm = Algorithm(self.data, tune_algo_params)  # Contains Naive Bayes, KNN
-
+        self.algorithm.SVM_linear()
         # Run machine learning algorithms
         self.algorithm.naive_bayes()
-        self.algorithm.KNN()
-        self.algorithm.SVM()
+        # self.algorithm.KNN()
+        # self.algorithm.SVM()
 
 
 if __name__ == "__main__":
