@@ -49,7 +49,7 @@ class Algorithm:
             # knn_model = KNeighborsClassifier(n_neighbors=tuned_params['n_neighbors'], weights=tuned_params['weights'],
             #                                  algorithm=tuned_params['algorithm'], p=tuned_params['p'],
             #                                  metric=tuned_params['metric'])  # Instantiate K Nearest Neighbors model
-            knn_model = KNeighborsClassifier(n_neighbors=29, weights='uniform', algorithm='auto', p='p',
+            knn_model = KNeighborsClassifier(n_neighbors=26, weights='uniform', algorithm='auto', p='p',
                                              metric='cosine')  # Instantiate K Nearest Neighbors model
             self.data.print_title('Fitting KNN Model')
             knn_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
@@ -85,7 +85,10 @@ class Algorithm:
         # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
         self.data.print_title('SVM Linear')
         if not self.model_exists('SVM_linear.sav'):  # Saves the model if it doesn't exist
-            svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1', verbose=3)  # Instantiate SVM Model
+            tuned_params = self.tune_svm_linear()  # Tune Parameters
+            svm_model = svm.LinearSVC(C=tuned_params['C'], dual=tuned_params['dual'], fit_intercept=tuned_params['fit_intercept'], multi_class=tuned_params['multi_class'], penalty=tuned_params['penalty'])  # Instantiate SVM Model
+
+            # svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1', verbose=3)  # Instantiate SVM Model
             self.data.print_title('Fitting SVM Linear Model')
             svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(svm_model, 'SVM_linear.sav')
@@ -123,19 +126,21 @@ class Algorithm:
         grid_search = GridSearchCV(MultinomialNB(), params, verbose=3)  # Instantiate grid search
         grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
         print("NB best params: ", grid_search.best_params_)
+        return grid_search.best_params_
 
     def tune_KNN(self):  # Tune the KNN parameters
         self.data.print_title('Tuning KNN')
 
         # Following code for tuning sourced from: https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
 
-        params = {'n_neighbors': list(range(1, 30)), 'weights': ['uniform', 'distance'],
+        params = {'n_neighbors': list(range(5, 30)), 'weights': ['uniform', 'distance'],
                   'algorithm': ['auto', 'brute'], 'p': ['p', 1, 2],
                   'metric': ['cityblock', 'cosine', 'euclidean', 'l1', 'l2',
                              'manhattan']}  # Set the params and values to tune
         grid_search = GridSearchCV(KNeighborsClassifier(), params, verbose=3)  # Instantiate grid search
         grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
         print("KNN best params: ", grid_search.best_params_)
+        return grid_search.best_params_
 
     def tune_svm_svc(self):  # Tune svm_svc params
         self.data.print_title('Tuning SVM SVC')
@@ -164,3 +169,4 @@ class Algorithm:
         grid_search = GridSearchCV(svm.LinearSVC(), params, verbose=3)  # Instantiate grid search
         grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
         print("Linear SVM best params: ", grid_search.best_params_)
+        return grid_search.best_params_
