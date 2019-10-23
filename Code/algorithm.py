@@ -13,7 +13,7 @@ class Algorithm:
         self.data = data  # @Variables: Id, Text, Label
         # TODO test on other data
 
-        self.vectorizer = CountVectorizer('english')
+        self.vectorizer = CountVectorizer(lowercase=True)
         self.data_vector = self.vectorizer.fit_transform(self.data.train_tweet)  # Fit a fector on the train data
         self.data_vector_test = self.vectorizer.transform(self.data.test_tweet)  # Fit the test data into a vector
         if tune_params:
@@ -21,6 +21,7 @@ class Algorithm:
             # self.tune_KNN()
             # self.tune_svm_svc()
             self.tune_svm_linear()
+
     def naive_bayes(self):  # Predict with Naive Bayes
         self.data.print_title('Naive Bayes')
         if not self.model_exists('NB.sav'):  # Saves the model if it doesn't exist
@@ -70,11 +71,14 @@ class Algorithm:
             #                     coef0=tuned_params['coef0'], shrinking=tuned_params['shrinking'],
             #                     probability=tuned_params['probability'],
             #                     decision_function_shape=tuned_params['decisiion_function'])  # Instantiate SVM Model
-            svm_model = svm.SVC(gamma='auto', kernel='linear', coef0=0.0, shrinking=True, probability=True, decision_function_shape='ovo')  # Instantiate SVM Model
+            svm_model = svm.SVC(gamma='auto', kernel='linear', coef0=0.0, shrinking=True, probability=True,
+                                decision_function_shape='ovo')  # Instantiate SVM Model
             self.data.print_title('Fitting SVM Model')
             svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(svm_model, 'SVM.sav')
         svm_model = self.load_model('SVM.sav')  # Load the model
+        svm_model.fit(self.data_vector, self.data.train_label)
+
         self.data.print_title('Predicting SVM')
         predict = svm_model.predict(self.data_vector_test)  # Predict on the test set
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
@@ -85,13 +89,15 @@ class Algorithm:
         # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
         self.data.print_title('SVM Linear')
         if not self.model_exists('SVM_linear.sav'):  # Saves the model if it doesn't exist
-            tuned_params = self.tune_svm_linear()  # Tune Parameters
-            svm_model = svm.LinearSVC(C=tuned_params['C'], dual=tuned_params['dual'], fit_intercept=tuned_params['fit_intercept'], multi_class=tuned_params['multi_class'], penalty=tuned_params['penalty'])  # Instantiate SVM Model
+            # tuned_params = self.tune_svm_linear()  # Tune Parameters
+            # svm_model = svm.LinearSVC(C=tuned_params['C'], dual=tuned_params['dual'], fit_intercept=tuned_params['fit_intercept'], multi_class=tuned_params['multi_class'], penalty=tuned_params['penalty'])  # Instantiate SVM Model
 
-            # svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1', verbose=3)  # Instantiate SVM Model
+            svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1',
+                                      verbose=3)  # Instantiate SVM Model
             self.data.print_title('Fitting SVM Linear Model')
             svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(svm_model, 'SVM_linear.sav')
+
         svm_model = self.load_model('SVM_linear.sav')  # Load the model
         self.data.print_title('Predicting SVM')
         predict = svm_model.predict(self.data_vector_test)  # Predict on the test set
@@ -156,7 +162,6 @@ class Algorithm:
         grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
         print("SVM best params: ", grid_search.best_params_)
 
-
     def tune_svm_linear(self):  # Tune svm_Linear params
         self.data.print_title('Tuning Linear SVM')
 
@@ -165,7 +170,8 @@ class Algorithm:
         params = {'C': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
                   'penalty': ['l1', 'l2'],
                   'dual': [False],
-                  'multi_class' : ['ovr', 'crammer_singer'], 'fit_intercept': [True, False]}  # Set the params and values to tune
+                  'multi_class': ['ovr', 'crammer_singer'],
+                  'fit_intercept': [True, False]}  # Set the params and values to tune
         grid_search = GridSearchCV(svm.LinearSVC(), params, verbose=3)  # Instantiate grid search
         grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
         print("Linear SVM best params: ", grid_search.best_params_)
