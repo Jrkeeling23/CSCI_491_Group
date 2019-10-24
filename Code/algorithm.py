@@ -6,6 +6,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from os import path
+from sklearn.linear_model import SGDClassifier
 
 
 class Algorithm:
@@ -20,7 +21,7 @@ class Algorithm:
             # self.tune_naive_bayes()
             # self.tune_KNN()
             # self.tune_svm_svc()
-            self.tune_svm_linear()
+            self.tune_sgd()
 
     def naive_bayes(self):  # Predict with Naive Bayes
         self.data.print_title('Naive Bayes')
@@ -62,29 +63,6 @@ class Algorithm:
         # print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
         print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
 
-    def SVM_SVC(self):  # Method for support vector machine
-        # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
-        self.data.print_title('SVM')
-        if not self.model_exists('SVM.sav'):  # Saves the model if it doesn't exist
-            # tuned_params = self.tune_svm_svc()  # Tune Parameters
-            # svm_model = svm.SVC(gamma='auto', kernel=tuned_params['kernel'],
-            #                     coef0=tuned_params['coef0'], shrinking=tuned_params['shrinking'],
-            #                     probability=tuned_params['probability'],
-            #                     decision_function_shape=tuned_params['decisiion_function'])  # Instantiate SVM Model
-            svm_model = svm.SVC(gamma='auto', kernel='linear', coef0=0.0, shrinking=True, probability=True,
-                                decision_function_shape='ovo')  # Instantiate SVM Model
-            self.data.print_title('Fitting SVM Model')
-            svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
-            self.save_model(svm_model, 'SVM.sav')
-        svm_model = self.load_model('SVM.sav')  # Load the model
-        svm_model.fit(self.data_vector, self.data.train_label)
-
-        self.data.print_title('Predicting SVM')
-        predict = svm_model.predict(self.data_vector_test)  # Predict on the test set
-        # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
-        # print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
-        print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
-
     def SVM_linear(self):  # Method for support vector machine Linear
         # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
         self.data.print_title('SVM Linear')
@@ -101,6 +79,25 @@ class Algorithm:
         svm_model = self.load_model('SVM_linear.sav')  # Load the model
         self.data.print_title('Predicting SVM')
         predict = svm_model.predict(self.data_vector_test)  # Predict on the test set
+        # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
+        # print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
+        print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
+
+    def SGD(self):  # Method for support vector machine Linear
+        # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
+        self.data.print_title('SGD')
+        if not self.model_exists('SGD.sav'):  # Saves the model if it doesn't exist
+            # tuned_params = self.tune_svm_linear()  # Tune Parameters
+            # svm_model = svm.LinearSVC(C=tuned_params['C'], dual=tuned_params['dual'], fit_intercept=tuned_params['fit_intercept'], multi_class=tuned_params['multi_class'], penalty=tuned_params['penalty'])  # Instantiate SVM Model
+
+            sgd_model = SGDClassifier()  # Instantiate SVM Model
+            self.data.print_title('Fitting SGD Model')
+            sgd_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
+            self.save_model(sgd_model, 'SGD.sav')
+
+        sgd_model = self.load_model('SGD.sav')  # Load the model
+        self.data.print_title('Predicting SGDD')
+        predict = sgd_model.predict(self.data_vector_test)  # Predict on the test set
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
         # print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
         print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
@@ -175,4 +172,19 @@ class Algorithm:
         grid_search = GridSearchCV(svm.LinearSVC(), params, verbose=3)  # Instantiate grid search
         grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
         print("Linear SVM best params: ", grid_search.best_params_)
+        return grid_search.best_params_
+
+    def tune_sgd(self):  # Tune svm_Linear params
+        self.data.print_title('Tuning SGD')
+
+        # Following code for tuning sourced from: https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
+
+        params = {'loss': ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_loss', 'huber',
+                           'epsilon_insensitive', 'squared_epsilon_insensitive'],
+                  'penalty': ['none', 'l2', 'l1', 'elasticnet'],
+                  'alpha': [0.0001, .0002, .0003, .0004, .0005, .0006], 'fit_intercept': [True, False],
+                  'power_t': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]}  # Set the params and values to tune
+        grid_search = GridSearchCV(SGDClassifier(), params, verbose=3)  # Instantiate grid search
+        grid_search.fit(self.data_vector, self.data.train_label)  # Fit the best parameters
+        print("SGD best params: ", grid_search.best_params_)
         return grid_search.best_params_
