@@ -6,7 +6,7 @@ import preprocessor as tweet_preprocessor
 import numpy as np
 
 
-class Data():
+class Data:
     def __init__(self):
         nltk.download('stopwords')
         nltk.download('wordnet')
