@@ -7,14 +7,14 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from os import path
 from sklearn.linear_model import SGDClassifier
-
+from sklearn.feature_selection import RFE
 
 class Algorithm:
     def __init__(self, data, tune_params):
         self.data = data  # @Variables: Id, Text, Label
         # TODO test on other data
-
-        self.vectorizer = CountVectorizer('english', lowercase=True)
+        # self.vectorizer = TfidfVectorizer(lowercase=True)
+        self.vectorizer = CountVectorizer()
         self.data_vector = self.vectorizer.fit_transform(self.data.train_tweet)  # Fit a fector on the train data
         self.data_vector_test = self.vectorizer.transform(self.data.test_tweet)  # Fit the test data into a vector
         if tune_params:
@@ -33,6 +33,7 @@ class Algorithm:
             nb_model = MultinomialNB(alpha=0.7,
                                      fit_prior=True)  # Instantiate the Naive Bayes Model
             self.data.print_title('Fitting Naive Bayes Model')
+            # nb_model = RFE(nb_model, 5, step=1)
             nb_model.fit(self.data_vector, self.data.train_label)  # Fit the naive bayes model
             self.save_model(nb_model, 'NB.sav')
 
@@ -73,9 +74,9 @@ class Algorithm:
             #                           multi_class=tuned_params['multi_class'],
             #                           penalty=tuned_params['penalty'])  # Instantiate SVM Model
 
-            svm_model = SGDClassifier()  # Instantiate SVM Model
+            # svm_model = SGDClassifier()  # Instantiate SVM Model
 
-            # svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1')  # Instantiate SVM Model
+            svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1')  # Instantiate SVM Model
             self.data.print_title('Fitting SVM Linear Model')
             svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(svm_model, 'SVM_linear.sav')

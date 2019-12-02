@@ -11,8 +11,8 @@ class Main:
         tune_algo_params = False
         self.algorithm = Algorithm(self.data, tune_algo_params)  # Contains Naive Bayes, KNN, SVM
         # Run machine learning algorithms
-        self.algorithm.SVM_linear()
-        self.algorithm.KNN()
+        # self.algorithm.SVM_linear()
+        # self.algorithm.KNN()
         self.algorithm.naive_bayes()
 
         # self.algorithm.SVM()
