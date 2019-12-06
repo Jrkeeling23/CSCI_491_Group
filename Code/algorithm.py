@@ -8,6 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from os import path
 from sklearn.linear_model import SGDClassifier
 from sklearn.feature_selection import RFE
+from sklearn import metrics
 
 class Algorithm:
     def __init__(self, data, tune_params):
@@ -43,6 +44,12 @@ class Algorithm:
         predict = nb_model.predict(self.data_vector_test)  # Predict with naive bayes
 
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
+        print("macro F1:", metrics.f1_score(self.data.test_label, predict, average='macro'))
+        print("micro F1:", metrics.f1_score(self.data.test_label, predict, average='micro'))
+        print("macro precision:", metrics.precision_score(self.data.test_label, predict, average='macro'))
+        print("micro precision:", metrics.precision_score(self.data.test_label, predict, average='micro'))
+        print("macro recall:", metrics.recall_score(self.data.test_label, predict, average='macro'))
+        print("micro recall:", metrics.recall_score(self.data.test_label, predict, average='micro'))
         print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
 
     def KNN(self):  # Method for K nearest neightbors
@@ -62,21 +69,20 @@ class Algorithm:
         predict = knn_model.predict(self.data_vector_test)  # Predict on the test set
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
         # print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
+        print("macro F1:", metrics.f1_score(self.data.test_label, predict, average='macro'))
+        print("micro F1:", metrics.f1_score(self.data.test_label, predict, average='micro'))
+        print("macro precision:", metrics.precision_score(self.data.test_label, predict, average='macro'))
+        print("micro precision:", metrics.precision_score(self.data.test_label, predict, average='micro'))
+        print("macro recall:", metrics.recall_score(self.data.test_label, predict, average='macro'))
+        print("micro recall:", metrics.recall_score(self.data.test_label, predict, average='micro'))
         print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
 
     def SVM_linear(self):  # Method for support vector machine Linear
         # Following svm code sourced from: https://scikit-learn.org/stable/modules/svm.html
         self.data.print_title('SVM Linear')
         if not self.model_exists('SVM_linear.sav'):  # Saves the model if it doesn't exist
-            # tuned_params = self.tune_svm_linear()  # Tune Parameters
-            # svm_model = svm.LinearSVC(C=tuned_params['C'], dual=tuned_params['dual'],
-            #                           fit_intercept=tuned_params['fit_intercept'],
-            #                           multi_class=tuned_params['multi_class'],
-            #                           penalty=tuned_params['penalty'])  # Instantiate SVM Model
-
-            # svm_model = SGDClassifier()  # Instantiate SVM Model
-
-            svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1')  # Instantiate SVM Model
+            # Instantiate SVM Model
+            svm_model = svm.LinearSVC(C=0.1, dual=False, fit_intercept=True, multi_class='ovr', penalty='l1')
             self.data.print_title('Fitting SVM Linear Model')
             svm_model.fit(self.data_vector, self.data.train_label)  # Fit the data to the model
             self.save_model(svm_model, 'SVM_linear.sav')
@@ -84,7 +90,12 @@ class Algorithm:
         self.data.print_title('Predicting SVM')
         predict = svm_model.predict(self.data_vector_test)  # Predict on the test set
         # Following print statement. Source from assignment 3: https://colab.research.google.com/drive/1QjU4Y306pfmAozerZwrLvtaBUhJOCZFz#scrollTo=_ru8k_nK05xu
-        # print("\n", metrics.classification_report(self.y_test, predict))  # Print Metrics
+        print("macro F1:", metrics.f1_score(self.data.test_label, predict, average='macro'))
+        print("micro F1:", metrics.f1_score(self.data.test_label, predict, average='micro'))
+        print("macro precision:", metrics.precision_score(self.data.test_label, predict, average='macro'))
+        print("micro precision:", metrics.precision_score(self.data.test_label, predict, average='micro'))
+        print("macro recall:", metrics.recall_score(self.data.test_label, predict, average='macro'))
+        print("micro recall:", metrics.recall_score(self.data.test_label, predict, average='micro'))
         print("\n", metrics.classification_report(self.data.test_label, predict))  # Print Metrics
 
     def model_exists(self, model):  # Checks if the model exists
@@ -132,9 +143,8 @@ class Algorithm:
 
     def tune_svm_linear(self):  # Tune svm_Linear params
         self.data.print_title('Tuning Linear SVM')
-
-        # Following code for tuning sourced from: https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
-
+        # Following code for tuning
+        # sourced from: https://www.geeksforgeeks.org/svm-hyperparameter-tuning-using-gridsearchcv-ml/
         params = {'C': [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
                   'penalty': ['l1', 'l2'],
                   'dual': [False],

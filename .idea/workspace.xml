@@ -2,17 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cc5cf548-533f-47cb-9858-af4ef6bfcf88" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/CSCI_491_Group.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CSCI_491_Group.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/algorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/algorithm.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Code/data_processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/data_processing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Code/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/KNN.sav" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/models/NB.sav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/SVM_linear.sav" beforeDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,18 +49,6 @@
       <recent name="$PROJECT_DIR$/Data" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -95,6 +77,18 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
   <component name="SvnConfiguration">
     <configuration>$USER_HOME$/.subversion</configuration>
   </component>
@@ -121,12 +115,18 @@
       </map>
     </option>
   </component>
+  <component name="WindowStateProjectService">
+    <state x="643" y="257" width="632" height="544" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1575674584007">
+      <screen x="0" y="0" width="1920" height="1056" />
+    </state>
+    <state x="643" y="257" width="632" height="544" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1056@0.0.1920.1056" timestamp="1575674584007" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Code/algorithm.py</url>
-          <line>17</line>
+          <line>18</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>

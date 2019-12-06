@@ -20,8 +20,8 @@ class Data:
         # self.train_label = self.train_label[0:10000]
         # self.train_tweet = self.train_tweet[0:10000]
 
-        self.train_tweet = self.get_sentiment(self.train_tweet)
-        self.test_tweet = self.get_sentiment(self.test_tweet)
+        # self.train_tweet = self.get_sentiment(self.train_tweet)
+        # self.test_tweet = self.get_sentiment(self.test_tweet)
 
         # self.train_tweet = self.stop_words(self.train_tweet)
         # self.test_tweet = self.stop_words(self.test_tweet)
@@ -121,6 +121,7 @@ class Data:
 
         sentiment_tweet = []
         iterator = 0
+        #Following sourced from https://www.geeksforgeeks.org/twitter-sentiment-analysis-using-python/
         for row in tweet:
             tweet_temp = TextBlob(row)
             # sentiment[iterator] = tweet_temp.sentiment.polarity
