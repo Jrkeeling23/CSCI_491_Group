@@ -6,6 +6,9 @@ from nltk import bigrams
 import preprocessor as tweet_preprocessor
 import numpy as np
 import logging
+import tracemalloc
+
+tracemalloc.start()
 logging.basicConfig(filename='example.log',level=logging.DEBUG)
 
 class Data:
@@ -26,11 +29,11 @@ class Data:
     def get_files(self):  # Get the data files and convert them to pandas DataFrames.
         self.train_tweet = list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.text'))  # Get train tweets
         self.train_id = np.array(
-            list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.ids'))).flatten()  # Get train id's
+            list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.ids')))  # Get train id's
         self.train_label = np.array(
-            list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.labels'))).flatten()  # Get train Labels
+            list(open('../data/tweet_by_ID_08_9_2019__04_16_29.txt.labels')))  # Get train Labels
         self.test_tweet = list(open('../data/us_test.text'))  # Get test Tweets
-        self.test_label = np.array(list(open('../data/us_test.labels'))).flatten()  # Get test labels
+        self.test_label = np.array(list(open('../data/us_test.labels')))  # Get test labels
 
     def stem(self):  # Method to stem test
         logging.info('Stem Data: Begin')
